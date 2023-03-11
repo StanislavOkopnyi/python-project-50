@@ -14,7 +14,11 @@ def _parse(dict1: dict, dict2: dict) -> list[tuple]:
     only_set2 = set(map(lambda x: ("  + " + x[0], x[1]), only_set2))
 
     result = list(common | only_set1 | only_set2)
-    # Сортируем по имени элемента
+
+    # В результате этой сортировки имена располагаются в алфавитном порядке
+    # В случае если встречается два имени, то имя с "-", оказывается выше
+    # имени с "+"
+    result.sort(key=lambda x: x[0][2], reverse=True)
     result.sort(key=lambda x: x[0][4:])
     return result
 

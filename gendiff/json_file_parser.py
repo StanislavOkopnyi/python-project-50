@@ -1,16 +1,12 @@
 import json
 from itertools import product
+from typing import Any
 
 
 def _parse(dict1: dict, dict2: dict) -> list[tuple]:
-    set1 = dict1.items()
-    set2 = dict2.items()
-
     result = []
-    # Хотел сделать через set1 & set2 и т.д., но не работает, если
-    # в JSON находится array
 
-    for key_value1, key_value2 in product(set1, set2):
+    for key_value1, key_value2 in product(dict1.items(), dict2.items()):
         key1, key2 = key_value1[0], key_value2[0]
         value1, value2 = key_value1[1], key_value2[1]
         if key1 == key2:
@@ -39,6 +35,13 @@ def _parse(dict1: dict, dict2: dict) -> list[tuple]:
     return result
 
 
+def _process_value(value: Any) -> str:
+    value = str(value)
+    value = value[0].lower() + value[1:]
+    value = value.replace("\'", "\"")
+    return value
+
+
 def generate_diff(first_file: str, second_file: str):
     """Принимает пути до двух JSON файлов - возвращает
     результат сравнения в виде строки"""
@@ -59,7 +62,7 @@ def generate_diff(first_file: str, second_file: str):
 
     result = "{\n"
     for elem in json_parsed:
-        result += (f"{elem[0]}: {str(elem[1]).lower()}\n")
+        result += (f"{elem[0]}: {_process_value(elem[1])}\n")
     result += "}"
 
     return result

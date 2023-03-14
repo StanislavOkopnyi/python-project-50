@@ -1,4 +1,8 @@
-import json
+from yaml import load
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
 from itertools import product
 from typing import Any
 
@@ -47,14 +51,14 @@ def generate_diff(first_file: str, second_file: str):
     результат сравнения в виде строки"""
 
     try:
-        with open(first_file) as f:
-            json_first_file = json.load(f)
+        with open(first_file) as file:
+            json_first_file = load(file, Loader=Loader)
     except FileNotFoundError:
         return (f"Can't find {first_file}")
 
     try:
-        with open(second_file) as f:
-            json_second_file = json.load(f)
+        with open(second_file) as file:
+            json_second_file = load(file, Loader=Loader)
     except FileNotFoundError:
         return (f"Can't find {second_file}")
 

@@ -7,7 +7,7 @@ from itertools import product
 from typing import Any
 
 
-def _parse(dict1: dict, dict2: dict) -> list[tuple]:
+def _compare(dict1: dict, dict2: dict) -> list[tuple]:
     result = []
 
     for key_value1, key_value2 in product(dict1.items(), dict2.items()):
@@ -52,20 +52,20 @@ def generate_diff(first_file: str, second_file: str):
 
     try:
         with open(first_file) as file:
-            json_first_file = load(file, Loader=Loader)
+            loaded_first_file = load(file, Loader=Loader)
     except FileNotFoundError:
         return (f"Can't find {first_file}")
 
     try:
         with open(second_file) as file:
-            json_second_file = load(file, Loader=Loader)
+            loaded_second_file = load(file, Loader=Loader)
     except FileNotFoundError:
         return (f"Can't find {second_file}")
 
-    json_parsed = _parse(json_first_file, json_second_file)
+    files_compared = _compare(loaded_first_file, loaded_second_file)
 
     result = "{\n"
-    for elem in json_parsed:
+    for elem in files_compared:
         result += (f"{elem[0]}: {_process_value(elem[1])}\n")
     result += "}"
 

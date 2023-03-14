@@ -2,7 +2,7 @@ import pytest
 from gendiff import generate_diff
 
 
-def test_gendiff1():
+def test_gendiff_json():
     input_data1 = "test/fixtures/file1.json", "test/fixtures/file2.json"
     expected1 = """{
   - follow: false
@@ -42,10 +42,28 @@ def test_gendiff1():
   + title: {"rendered": "Why the IoT Threatens Your Tilda Site (and How to Fix It)"}
     type: post
 }"""
-    assert generate_diff(*(input_data3)) == expected3
+    assert generate_diff(*input_data3) == expected3
 
 
-def test_gendiff2():
+def test_gendiff_yaml():
+    input_data1 = "test/fixtures/file1.yaml", "test/fixtures/file2.yaml"
+    expected1 = """{
+    Bakery: ["Sourdough loaf", "Bagels"]
+  - Cheesemonger: ["Blue cheese", "Feta"]
+  + Cheesemonger: ["Red cheese", "Feta"]
+}"""
+    assert generate_diff(*input_data1) == expected1
+    input_data2 = "test/fixtures/file3.yaml", "test/fixtures/file4.yaml"
+    expected2 = """{
+    defaults: {"adapter": "postgres", "host": "localhost"}
+  - development: {"adapter": "postgres", "host": "localhost", "database": "notmyapp_development"}
+  + development: {"adapter": "postgres", "host": "localhost", "database": "myapp_development"}
+    test: {"adapter": "postgres", "host": "localhost", "database": "myapp_test"}
+}"""
+    assert generate_diff(*input_data2) == expected2
+
+
+def test_gendiff_wrong_file_name():
     input_data1 = "some_file.json", "test/fixtures/file2.json"
     input_data2 = "test/fixtures/file2.json", "some_file.json"
     expected = "Can't find some_file.json"
@@ -53,7 +71,7 @@ def test_gendiff2():
     assert generate_diff(*input_data2) == expected
 
 
-def test_gendiff3():
+def test_gendiff_json_empty():
     input_data = "test/fixtures/file3.json", "test/fixtures/file3_1.json"
     expected = """{
   - category: hue

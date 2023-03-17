@@ -1,49 +1,76 @@
+from typing import Any
 from yaml import load
 try:
     from yaml import CLoader as Loader
 except ImportError:
     from yaml import Loader
-from itertools import product
-from typing import Any
+from json import dumps
+COMMON = "    "
+IN_FIRST_FILE = "  - "
+IN_SECOND_FILE = "  + "
 
 
-def _compare(dict1: dict, dict2: dict) -> list[tuple]:
-    result = []
+def is_dicts(obj1: Any, obj2: Any) -> bool:
+    return isinstance(obj1, dict) and isinstance(obj2, dict)
 
-    for key_value1, key_value2 in product(dict1.items(), dict2.items()):
-        key1, key2 = key_value1[0], key_value2[0]
-        value1, value2 = key_value1[1], key_value2[1]
-        if key1 == key2:
 
-            if value1 == value2:
-                result.append(("    " + key1, value1))
-            elif value1 != value2:
-                result.append(("  - " + key1, value1))
-                result.append(("  + " + key2, value2))
+def check_type(obj: Any, depth: int) -> str:
+    if isinstance(obj, dict):
+        return compare_files(obj, obj, depth=depth+1)
+    return dumps(obj)
 
+
+def compare_files(dict1: dict, dict2: dict, depth: int = 0) -> str:
     keys1, keys2 = dict1.keys(), dict2.keys()
 
-    for key1 in keys1:
-        if key1 not in keys2:
-            result.append(("  - " + key1, dict1[key1]))
+    common_keys = keys1 & keys2
+    only_dict1_keys = keys1 - keys2
+    only_dict2_keys = keys2 - keys1
 
-    for key2 in keys2:
-        if key2 not in keys1:
-            result.append(("  + " + key2, dict2[key2]))
+    result = []
 
-    # В результате этой сортировки имена располагаются в алфавитном порядке
-    # В случае если встречается два имени, то имя с "-", оказывается выше
-    # имени с "+"
-    result.sort(key=lambda x: x[0][2], reverse=True)
-    result.sort(key=lambda x: x[0][4:])
-    return result
+    for key in common_keys:
 
+        if dict1[key] == dict2[key] and not is_dicts(dict1[key], dict2[key]):
+            result.append(COMMON + f"{key}: {dumps(dict1[key])}")
 
-def _process_value(value: Any) -> str:
-    value = str(value)
-    value = value[0].lower() + value[1:]
-    value = value.replace("\'", "\"")
-    return value
+        elif dict1[key] != dict2[key] and not is_dicts(dict1[key], dict2[key]):
+            result.append(IN_FIRST_FILE +
+                          f"{key}: {check_type(dict1[key], depth)}")
+            result.append(IN_SECOND_FILE +
+                          f"{key}: {check_type(dict2[key], depth)}")
+
+        elif is_dicts(dict1[key], dict2[key]):
+            result.append(
+                COMMON + f"{key}: "
+                f"{compare_files(dict1[key], dict2[key], depth=depth+1)}"
+            )
+
+    for key in only_dict1_keys:
+        if isinstance(dict1[key], dict):
+            result.append(IN_FIRST_FILE + f"{key}: "
+                          f"{compare_files(dict1[key], dict1[key], depth=depth+1)}")
+        else:
+            result.append(IN_FIRST_FILE +
+                          f"{key}: {check_type(dict1[key], depth)}")
+
+    for key in only_dict2_keys:
+        if isinstance(dict2[key], dict):
+            result.append(IN_SECOND_FILE + f"{key}: "
+                          f"{compare_files(dict2[key], dict2[key], depth=depth+1)}")
+        else:
+            result.append(IN_SECOND_FILE +
+                          f"{key}: {check_type(dict2[key], depth)}")
+
+    # Сортируем, получая "-" выше "+"
+    result.sort(key=lambda x: x[2], reverse=True)
+    # Сортируем по названию(до ":")
+    result.sort(key=lambda x: x[4:x.index(":")])
+
+    result.insert(0, "{")
+    result.append("}")
+
+    return f"\n{COMMON * depth}".join(result).replace(' ""', '').replace('"', "")
 
 
 def generate_diff(first_file: str, second_file: str):
@@ -62,11 +89,4 @@ def generate_diff(first_file: str, second_file: str):
     except FileNotFoundError:
         return (f"Can't find {second_file}")
 
-    files_compared = _compare(loaded_first_file, loaded_second_file)
-
-    result = "{\n"
-    for elem in files_compared:
-        result += (f"{elem[0]}: {_process_value(elem[1])}\n")
-    result += "}"
-
-    return result
+    return compare_files(loaded_first_file, loaded_second_file)

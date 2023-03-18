@@ -9,7 +9,7 @@ except ImportError:
 from json import dumps
 
 
-def generate_diff(first_file: str, second_file: str, foramter=stylish):
+def generate_diff(first_file: str, second_file: str, formater=stylish):
     '''
     Returns string with two compared json/yaml files.
     If function can't find file returns "Can't find {file path}"
@@ -35,7 +35,7 @@ def generate_diff(first_file: str, second_file: str, foramter=stylish):
         return (f"Can't find {second_file}")
 
     compared_files = _compare_files(loaded_first_file, loaded_second_file)
-    compared_files = foramter(compared_files)
+    compared_files = formater(compared_files)
 
     return compared_files
 
@@ -48,7 +48,7 @@ def _compare_files(dict1: dict, dict2: dict) -> str:
     compared_list.extend(_compare_uncommon_keys(dict1, dict2))
 
     # Сортируем, получая "-" выше "+"
-    compared_list.sort(key=lambda x: x[1], reverse=True)
+    compared_list.sort(key=lambda x: x[0], reverse=True)
     # Сортируем по названию(до ":")
     compared_list.sort(key=lambda x: x[2:x.index(":")])
 

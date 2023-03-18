@@ -1,0 +1,19 @@
+employees:
+    martin:
+        name: Martin D'vloper
+        job: Data scientist
+        skills:
+          - python
+          - go
+          - pascal
+    tabitha:
+        name: Tabitha Bitumen
+        job: Developer
+        skills:
+          - lisp
+          - cobol
+          - erlang
+
+
+
+

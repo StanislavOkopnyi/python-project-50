@@ -98,7 +98,8 @@ def test_gendiff_json_empty():
 
 
 def test_gendiff_path():
-    input_data1 = "test/fixtures/filepath1.json", "test/fixtures/filepath2.json"
+    input_data1 = ("test/fixtures/filepath1.json",
+                   "test/fixtures/filepath2.json")
     expected1 = """{
     common: {
       + follow: false
@@ -144,3 +145,23 @@ def test_gendiff_path():
     }
 }"""
     assert generate_diff(*input_data1) == expected1
+    input_data2 = ("test/fixtures/filepath1.yaml",
+                   "test/fixtures/filepath2.yaml")
+    expected2 = """{
+    employees: {
+        martin: {
+          - job: Developer
+          + job: Data scientist
+            name: Martin D'vloper
+          - skills: [python, perl, pascal]
+          + skills: [python, go, pascal]
+        }
+        tabitha: {
+            job: Developer
+            name: Tabitha Bitumen
+          - skills: [lisp, fortran, erlang]
+          + skills: [lisp, cobol, erlang]
+        }
+    }
+}"""
+    assert generate_diff(*input_data2) == expected2

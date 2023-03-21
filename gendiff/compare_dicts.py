@@ -47,8 +47,6 @@ def _compare_uncommon_keys(dict1: dict, dict2: dict) -> list[dict]:
 def _process_value(value: Any):
     if isinstance(value, dict):
         return compare_dicts(value, value)
-    elif isinstance(value, FunctionType):
-        return value
     return json.dumps(value)
 
 
@@ -56,12 +54,8 @@ def _is_dicts(obj1: Any, obj2: Any) -> bool:
     return isinstance(obj1, dict) and isinstance(obj2, dict)
 
 
-def empty_value():
-    pass
-
-
-def make_item(name: str, last: Any = empty_value,
-              now: Any = empty_value) -> dict:
+def make_item(name: str, last: Any = "__empty_value__",
+              now: Any = "__empty_value__") -> dict:
     return {"name": name,
             "last": _process_value(last),
             "now": _process_value(now),

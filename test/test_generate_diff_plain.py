@@ -1,5 +1,5 @@
 from gendiff import generate_diff
-from gendiff.plain import plain
+from gendiff.plain import make_plain
 
 
 def test_gendiff_path():
@@ -16,19 +16,19 @@ Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]"""
 
-    assert generate_diff(*input_data1, plain) == expected
+    assert generate_diff(*input_data1, make_plain) == expected
 
 
 def test_gendiff_yaml():
     input_data1 = "test/fixtures/file1.yaml", "test/fixtures/file2.yaml"
     expected1 = """Property 'Cheesemonger' was updated. From ['Blue cheese', 'Feta'] to ['Red cheese', 'Feta']"""
 
-    assert generate_diff(*input_data1, plain) == expected1
+    assert generate_diff(*input_data1, make_plain) == expected1
 
     input_data2 = "test/fixtures/file3.yaml", "test/fixtures/file4.yaml"
     expected2 = """Property 'development.database' was updated. From 'notmyapp_development' to 'myapp_development'"""
 
-    assert generate_diff(*input_data2, plain) == expected2
+    assert generate_diff(*input_data2, make_plain) == expected2
 
 
 def test_gendiff_json():
@@ -38,13 +38,13 @@ Property 'proxy' was removed
 Property 'timeout' was updated. From 50 to 20
 Property 'verbose' was added with value: true"""
 
-    assert generate_diff(*input_data1, plain) == expected1
+    assert generate_diff(*input_data1, make_plain) == expected1
 
     input_data2 = "test/fixtures/file3.json", "test/fixtures/file4.json"
     expected2 = """Property 'color' was updated. From 'black' to 'blue'
 Property 'type' was updated. From 'primary' to 'secondary'"""
 
-    assert generate_diff(*input_data2, plain) == expected2
+    assert generate_diff(*input_data2, make_plain) == expected2
 
     input_data3 = "test/fixtures/file5.json", "test/fixtures/file6.json"
     expected = """Property 'date' was updated. From '2017-07-21T10:30:34' to '2018-07-21T10:30:34'
@@ -61,7 +61,7 @@ Property 'hex' was removed
 Property 'rgba' was removed
 Property 'type' was removed"""
 
-    assert generate_diff(*input_data1, plain) == expected1
+    assert generate_diff(*input_data1, make_plain) == expected1
 
     input_data2 = "test/fixtures/file3_1.json", "test/fixtures/file3.json"
     expected2 = """Property 'category' was added with value: 'hue'
@@ -70,4 +70,4 @@ Property 'hex' was added with value: '#000'
 Property 'rgba' was added with value: [255, 255, 255, 1]
 Property 'type' was added with value: 'primary'"""
 
-    assert generate_diff(*input_data2, plain) == expected2
+    assert generate_diff(*input_data2, make_plain) == expected2

@@ -1,9 +1,9 @@
-from gendiff.compare_dicts import empty_value, get_dict_value, \
+from gendiff.compare_dicts import get_dict_value, \
     get_item_versions, get_name, get_type
 from gendiff.indentations import COMMON, IN_FIRST_FILE, IN_SECOND_FILE
 
 
-def stylish(source: list, depth: int = 0) -> str:
+def make_stylish(source: list, depth: int = 0) -> str:
     result = []
     indentation = " " * 2 + " " * 4 * depth
 
@@ -11,7 +11,7 @@ def stylish(source: list, depth: int = 0) -> str:
         name = get_name(object)
         if get_type(object) == "common_dict":
             value = get_dict_value(object)
-            value = stylish(value, depth + 1)
+            value = make_stylish(value, depth + 1)
             result.append(indentation + COMMON + name + ": " + value)
         if get_type(object) == "item":
             last_version, current_version = get_item_versions(object)
@@ -19,10 +19,10 @@ def stylish(source: list, depth: int = 0) -> str:
                 result.append(indentation + COMMON + name +
                               ": " + last_version)
                 continue
-            if last_version != empty_value:
+            if last_version != '"__empty_value__"':
                 result.append(indentation + IN_FIRST_FILE + name +
                               ": " + _check_type(last_version, depth))
-            if current_version != empty_value:
+            if current_version != '"__empty_value__"':
                 result.append(indentation + IN_SECOND_FILE + name +
                               ": " + _check_type(current_version, depth))
 
@@ -34,5 +34,5 @@ def stylish(source: list, depth: int = 0) -> str:
 
 def _check_type(obj: str | list, depth: int) -> str:
     if isinstance(obj, list):
-        return stylish(obj, depth + 1)
+        return make_stylish(obj, depth + 1)
     return obj

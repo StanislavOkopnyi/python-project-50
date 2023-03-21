@@ -1,11 +1,17 @@
-from gendiff.plain import plain
+from gendiff.plain import make_plain
+from gendiff.json import make_json
 from gendiff.settings import args
 from gendiff import generate_diff
 
 
 def main():
-    if args.format == "plain":
-        difference = generate_diff(args.first_file, args.second_file, plain)
+    if args.format == "make_plain":
+        difference = generate_diff(args.first_file, args.second_file,
+                                   make_plain)
+        print(difference)
+    elif args.format == "json":
+        difference = generate_diff(args.first_file, args.second_file,
+                                   make_json)
         print(difference)
     else:
         difference = generate_diff(args.first_file, args.second_file)

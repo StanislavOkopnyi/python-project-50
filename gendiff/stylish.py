@@ -1,13 +1,11 @@
-from gendiff.compare_dicts import empty_value, get_dict_value, get_item_versions, get_name, get_type
+from gendiff.compare_dicts import empty_value, get_dict_value, \
+    get_item_versions, get_name, get_type
 from gendiff.indentations import COMMON, IN_FIRST_FILE, IN_SECOND_FILE
 
 
-def stylish(source: list, depth: int = 1) -> str:
+def stylish(source: list, depth: int = 0) -> str:
     result = []
-    indentation = " " * 2
-
-    if depth > 1:
-        indentation += " " * 4 * (depth - 1)
+    indentation = " " * 2 + " " * 4 * depth
 
     for object in source:
         name = get_name(object)
@@ -28,7 +26,7 @@ def stylish(source: list, depth: int = 1) -> str:
                 result.append(indentation + IN_SECOND_FILE + name +
                               ": " + _check_type(current_version, depth))
 
-    result.append(" " * 4 * (depth - 1) + "}")
+    result.append(" " * 4 * depth + "}")
     result.insert(0, "{")
     result = "\n".join(result)
     return result.replace(' ""', '').replace('"', '')

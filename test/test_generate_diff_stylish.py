@@ -86,15 +86,26 @@ def test_gendiff_wrong_file_name():
 
 
 def test_gendiff_json_empty():
-    input_data = "test/fixtures/file3.json", "test/fixtures/file3_1.json"
-    expected = """{
+    input_data1 = "test/fixtures/file3.json", "test/fixtures/file3_1.json"
+    expected1 = """{
   - category: hue
   - color: black
   - hex: #000
   - rgba: [255, 255, 255, 1]
   - type: primary
 }"""
-    assert generate_diff(*(input_data)) == expected
+    assert generate_diff(*input_data1) == expected1
+
+    input_data2 = "test/fixtures/file3_1.json", "test/fixtures/file3.json"
+    expected2 = """{
+  + category: hue
+  + color: black
+  + hex: #000
+  + rgba: [255, 255, 255, 1]
+  + type: primary
+}"""
+
+    assert generate_diff(*input_data2) == expected2
 
 
 def test_gendiff_path():

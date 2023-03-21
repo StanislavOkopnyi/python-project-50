@@ -7,7 +7,7 @@ except ImportError:
 from gendiff.compare_dicts import compare_dicts
 
 
-def generate_diff(first_file: str, second_file: str, formater=stylish) -> str:
+def generate_diff(first_file: str, second_file: str, formatter=stylish) -> str:
     '''
     Returns string with two compared json/yaml files.
     If function can't find file returns "Can't find {file path}"
@@ -33,6 +33,6 @@ def generate_diff(first_file: str, second_file: str, formater=stylish) -> str:
         return (f"Can't find {second_file}")
 
     compared_files = compare_dicts(loaded_first_file, loaded_second_file)
-    compared_files = formater(compared_files)
+    compared_files = formatter(compared_files)
 
     return compared_files

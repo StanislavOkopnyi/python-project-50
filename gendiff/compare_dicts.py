@@ -68,7 +68,7 @@ def make_item(name: str, last: Any = empty_value,
             "type": "item"}
 
 
-def make_common_dict(name: str, value: tuple[dict]):
+def make_common_dict(name: str, value: tuple[dict, dict]):
     return {"name": name,
             "value": compare_dicts(*value),
             "type": "common_dict"}
@@ -88,7 +88,3 @@ def get_dict_value(source: dict) -> list:
 
 def get_item_versions(source: dict) -> tuple[Any, Any]:
     return source["last"], source["now"]
-
-
-def put_dict_value(source: dict, value: Any) -> None:
-    source["value"] = value

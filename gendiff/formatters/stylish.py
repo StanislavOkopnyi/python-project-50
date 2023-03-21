@@ -41,7 +41,7 @@ def make_stylish(source: list, depth: int = 0) -> str:
     result.append(" " * 4 * depth + "}")
     result.insert(0, "{")
     result = "\n".join(result)
-    return result.replace(' ""', '').replace('"', '')
+    return result.replace('"', '')
 
 
 # if value is a sub dict returns json-like output with bigger indentation

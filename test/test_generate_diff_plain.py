@@ -1,5 +1,5 @@
 from gendiff import generate_diff
-from gendiff.plain import make_plain
+from gendiff.formatters.plain import make_plain
 
 
 def test_gendiff_path():

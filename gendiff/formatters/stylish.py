@@ -1,9 +1,21 @@
 from gendiff.compare_dicts import get_dict_value, \
     get_item_versions, get_name, get_type
-from gendiff.indentations import COMMON, IN_FIRST_FILE, IN_SECOND_FILE
+
+
+COMMON = "  "
+IN_FIRST_FILE = "- "
+IN_SECOND_FILE = "+ "
 
 
 def make_stylish(source: list, depth: int = 0) -> str:
+    '''
+    Returns json-like output from list of "item" and "common_dict"
+    If key: value is equal in both files - returns:
+        "{COMMON} {key: value}"
+    If key: value is different in first and second files - returns:
+        "{IN_FIRST_FILE} {key1: value1}"
+        "{IN_SECOND_FILE} {key2: value2}"
+    '''
     result = []
     indentation = " " * 2 + " " * 4 * depth
 
@@ -32,6 +44,7 @@ def make_stylish(source: list, depth: int = 0) -> str:
     return result.replace(' ""', '').replace('"', '')
 
 
+# if value is a sub dict returns json-like output with bigger indentation
 def _check_type(obj: str | list, depth: int) -> str:
     if isinstance(obj, list):
         return make_stylish(obj, depth + 1)

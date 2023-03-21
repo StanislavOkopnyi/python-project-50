@@ -1,5 +1,5 @@
 from yaml import load
-from gendiff.stylish import make_stylish
+from gendiff.formatters.stylish import make_stylish
 try:
     from yaml import CLoader as Loader
 except ImportError:
@@ -14,8 +14,8 @@ def generate_diff(first_file: str, second_file: str,
     If function can't find file returns "Can't find {file path}"
 
         Parameters:
-            first_file (str): A path to first json/yaml file
-            second_file (str): A path to second json/yaml file
+            first_file (str): Path to first json/yaml file
+            second_file (str): Path to second json/yaml file
 
         Returns:
             compared_files (str): String with differences between files

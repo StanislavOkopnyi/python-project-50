@@ -1,5 +1,5 @@
-from gendiff.plain import make_plain
-from gendiff.json import make_json
+from gendiff.formatters.plain import make_plain
+from gendiff.formatters.json import make_json
 from gendiff.settings import args
 from gendiff import generate_diff
 

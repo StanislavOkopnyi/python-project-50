@@ -1,3 +1,0 @@
-COMMON = "  "
-IN_FIRST_FILE = "- "
-IN_SECOND_FILE = "+ "

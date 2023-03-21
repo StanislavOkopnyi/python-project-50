@@ -3,6 +3,16 @@ from gendiff.compare_dicts import get_dict_value, \
 
 
 def make_plain(source: list[dict], path="") -> str | list[str]:
+    '''
+    Returns plain output from list of "item" and "common_dict"
+    If key: value doesnt change - returns nothing
+    If key: value changed in second file - returns:
+        "Property {path} was updated. From {old_value} to {new_value}"
+    If key: value is only in second value - returns:
+        "Property {path} was added with value: {new_value}
+    If key: value is only in first file - returns:
+        "Property {path} was removed"
+    '''
     result = []
 
     for obj in source:
@@ -11,21 +21,21 @@ def make_plain(source: list[dict], path="") -> str | list[str]:
         if get_type(obj) == "common_dict":
             result.extend(make_plain(get_dict_value(obj), new_path))
             continue
-        last_version, current_version = get_item_versions(obj)
+        old_value, new_value = get_item_versions(obj)
 
-        if last_version == current_version:
+        if old_value == new_value:
             continue
-        if last_version == '"__empty_value__"':
+        if old_value == '"__empty_value__"':
             result.append(
                 f"Property '{new_path}' was added "
-                f"with value: {_type_check(current_version)}")
-        elif current_version == '"__empty_value__"':
+                f"with value: {_type_check(new_value)}")
+        elif new_value == '"__empty_value__"':
             result.append(f"Property '{new_path}' was removed")
-        elif current_version != last_version:
+        elif new_value != old_value:
             result.append(
                 f"Property '{new_path}' was updated. "
-                f"From {_type_check(last_version)} to "
-                f"{_type_check(current_version)}"
+                f"From {_type_check(old_value)} to "
+                f"{_type_check(new_value)}"
             )
 
     if path == "":
@@ -33,6 +43,7 @@ def make_plain(source: list[dict], path="") -> str | list[str]:
     return result
 
 
+# if value is subdict returns [complex value]
 def _type_check(source: str | list) -> str:
     if isinstance(source, list):
         return "[complex value]"

@@ -8,7 +8,7 @@
 Возможности утилиты:
 
 * Поддержка разных входных форматов: yaml, json
-* Генерация отчета в виде plain text, stylish и json
+* Генерация отчета в виде plain, stylish и json
 
 Пример работы приложения:
 [![asciicast](https://asciinema.org/a/IdyGo3MJrNEDtCNeCCeDM0dvj.svg)](https://asciinema.org/a/IdyGo3MJrNEDtCNeCCeDM0dvj)

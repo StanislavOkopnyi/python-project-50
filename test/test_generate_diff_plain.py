@@ -47,10 +47,12 @@ Property 'type' was updated. From 'primary' to 'secondary'"""
     assert generate_diff(*input_data2, make_plain) == expected2
 
     input_data3 = "test/fixtures/file5.json", "test/fixtures/file6.json"
-    expected = """Property 'date' was updated. From '2017-07-21T10:30:34' to '2018-07-21T10:30:34'
-Property 'guid.rendered' was updated. From 'https://www.sitepoint.com/?p=157538' to 'rendered: http://www.sitepoint.com/?p=157538'
+    expected3 = """Property 'date' was updated. From '2017-07-21T10:30:34' to '2018-07-21T10:30:34'
+Property 'guid.rendered' was updated. From 'https://www.sitepoint.com/?p=157538' to 'http://www.sitepoint.com/?p=157538'
 Property 'modified' was updated. From '2017-07-23T21:56:35' to '2018-07-23T21:56:35'
 Property 'title.rendered' was updated. From 'Why the IoT Threatens Your WordPress Site (and How to Fix It)' to 'Why the IoT Threatens Your Tilda Site (and How to Fix It)'"""
+
+    assert generate_diff(*input_data3, make_plain) == expected3
 
 
 def test_gendiff_json_empty():

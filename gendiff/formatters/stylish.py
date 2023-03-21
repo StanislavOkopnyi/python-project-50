@@ -28,15 +28,20 @@ def make_stylish(source: list, depth: int = 0) -> str:
         if get_type(object) == "item":
             last_version, current_version = get_item_versions(object)
             if last_version == current_version:
-                result.append(indentation + COMMON + name +
-                              ": " + last_version)
+                result.append(
+                    indentation + COMMON + name + ": " + last_version
+                )
                 continue
             if last_version != '"__empty_value__"':
-                result.append(indentation + IN_FIRST_FILE + name +
-                              ": " + _check_type(last_version, depth))
+                result.append(
+                    indentation + IN_FIRST_FILE +
+                    name + ": " + _check_type(last_version, depth)
+                )
             if current_version != '"__empty_value__"':
-                result.append(indentation + IN_SECOND_FILE + name +
-                              ": " + _check_type(current_version, depth))
+                result.append(
+                    indentation + IN_SECOND_FILE + name +
+                    ": " + _check_type(current_version, depth)
+                )
 
     result.append(" " * 4 * depth + "}")
     result.insert(0, "{")

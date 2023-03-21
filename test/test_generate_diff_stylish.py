@@ -124,8 +124,7 @@ def test_gendiff_path():
         }
         setting6: {
             doge: {
-              - wow: 
-              + wow: so much
+              - wow: \n              + wow: so much
             }
             key: value
           + ops: vops

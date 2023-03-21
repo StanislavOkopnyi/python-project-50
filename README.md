@@ -10,10 +10,12 @@
 * Поддержка разных входных форматов: yaml, json
 * Генерация отчета в виде plain, stylish и json
 
-Пример работы приложения:
+Пример работы приложения (по умолчанию используется "stylish"):
 [![asciicast](https://asciinema.org/a/IdyGo3MJrNEDtCNeCCeDM0dvj.svg)](https://asciinema.org/a/IdyGo3MJrNEDtCNeCCeDM0dvj)
 
 
 Пример работы приложения при использовании формата "plain":
 [![asciicast](https://asciinema.org/a/ih0TsXOWlMpr3qZrX47svxDjR.svg)](https://asciinema.org/a/ih0TsXOWlMpr3qZrX47svxDjR)
 
+Пример работы приложения при использовании формат "json":
+[![asciicast](https://asciinema.org/a/W5YRowOUEnU3ExKPB2oINAUjM.svg)](https://asciinema.org/a/W5YRowOUEnU3ExKPB2oINAUjM)

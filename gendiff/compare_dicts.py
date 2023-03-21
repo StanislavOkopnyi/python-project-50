@@ -85,7 +85,7 @@ def make_item(name: str, last: Any = "__empty_value__",
     return item
 
 
-def make_common_dict(name: str, value: tuple[dict, dict]):
+def make_common_dict(name: str, value: tuple[dict, dict]) -> dict:
     '''
     Returns "common_dict"
     If two files have the same key and value is dict in both files, then

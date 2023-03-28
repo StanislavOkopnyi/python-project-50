@@ -5,6 +5,8 @@ from gendiff.compare_dicts import get_dict_value, \
 COMMON = "  "
 IN_FIRST_FILE = "- "
 IN_SECOND_FILE = "+ "
+FIRST_LEVEL_INDENTATION = 2
+DEEP_LEVEL_INDENTATION = 4
 
 
 def make_stylish(source: list, depth: int = 0) -> str:
@@ -17,35 +19,34 @@ def make_stylish(source: list, depth: int = 0) -> str:
         "{IN_SECOND_FILE} {key2: value2}"
     '''
     result = []
-    indentation = " " * 2 + " " * 4 * depth
+    indentation = " " * FIRST_LEVEL_INDENTATION +\
+                  " " * DEEP_LEVEL_INDENTATION * depth
 
     for object in source:
         name = get_name(object)
         if get_type(object) == "common_dict":
             value = get_dict_value(object)
             value = make_stylish(value, depth + 1)
-            result.append(indentation + COMMON + name + ": " + value)
+            result.append(f"{indentation}{COMMON}{name}: {value}")
         if get_type(object) == "item":
             last_version, current_version = get_item_versions(object)
             if last_version == current_version:
                 result.append(
-                    indentation + COMMON + name + ": " + last_version
+                    f"{indentation}{COMMON}{name}: {last_version}"
                 )
                 continue
             if last_version != '"__empty_value__"':
                 result.append(
-                    indentation + IN_FIRST_FILE + name + ": " + _check_type(
-                        last_version, depth
-                    )
+                    f"{indentation}{IN_FIRST_FILE}{name}: "
+                    f"{_check_type(last_version, depth)}"
                 )
             if current_version != '"__empty_value__"':
                 result.append(
-                    indentation + IN_SECOND_FILE + name + ": " + _check_type(
-                        current_version, depth
-                    )
+                    f"{indentation}{IN_SECOND_FILE}{name}: "
+                    f"{_check_type(current_version, depth)}"
                 )
 
-    result.append(" " * 4 * depth + "}")
+    result.append(" " * DEEP_LEVEL_INDENTATION * depth + "}")
     result.insert(0, "{")
     result = "\n".join(result)
     return result.replace('"', '')

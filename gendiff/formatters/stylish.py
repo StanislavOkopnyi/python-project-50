@@ -18,7 +18,7 @@ def make_stylish(source: list, depth: int = 0) -> str:
         "{IN_FIRST_FILE} {key1: value1}"
         "{IN_SECOND_FILE} {key2: value2}"
     '''
-    result = []
+    result = ["{",]
     indentation = " " * FIRST_LEVEL_INDENTATION +\
                   " " * DEEP_LEVEL_INDENTATION * depth
 
@@ -47,7 +47,6 @@ def make_stylish(source: list, depth: int = 0) -> str:
                 )
 
     result.append(" " * DEEP_LEVEL_INDENTATION * depth + "}")
-    result.insert(0, "{")
     result = "\n".join(result)
     return result.replace('"', '')
 

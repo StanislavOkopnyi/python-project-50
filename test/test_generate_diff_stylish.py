@@ -1,177 +1,72 @@
 from gendiff import generate_diff
+from test.fixtures.compare_results.stylish_results import *
 
 
 def test_gendiff_json():
-    input_data1 = "test/fixtures/file1.json", "test/fixtures/file2.json"
-    expected1 = """{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}"""
+    input_data1 = ("test/fixtures/json_yaml/file1.json",
+                   "test/fixtures/json_yaml/file2.json")
+    expected1 = file1_file2_json
+
     assert generate_diff(*input_data1) == expected1
-    input_data2 = "test/fixtures/file3.json", "test/fixtures/file4.json"
-    expected2 = """{
-    category: hue
-  - color: black
-  + color: blue
-    hex: #000
-    rgba: [255, 255, 255, 1]
-  - type: primary
-  + type: secondary
-}"""
+
+    input_data2 = ("test/fixtures/json_yaml/file3.json",
+                   "test/fixtures/json_yaml/file4.json")
+    expected2 = file3_file4_json
+
     assert generate_diff(*input_data2) == expected2
-    input_data3 = "test/fixtures/file5.json", "test/fixtures/file6.json"
-    expected3 = """{
-  - date: 2017-07-21T10:30:34
-  + date: 2018-07-21T10:30:34
-    date_gmt: 2017-07-21T17:30:34
-    guid: {
-      - rendered: https://www.sitepoint.com/?p=157538
-      + rendered: http://www.sitepoint.com/?p=157538
-    }
-    id: 157538
-    link: https://www.sitepoint.com/why-the-iot-threatens-your-wordpress-site-and-how-to-fix-it/
-  - modified: 2017-07-23T21:56:35
-  + modified: 2018-07-23T21:56:35
-    modified_gmt: 2017-07-24T04:56:35
-    slug: why-the-iot-threatens-your-wordpress-site-and-how-to-fix-it
-    status: publish
-    title: {
-      - rendered: Why the IoT Threatens Your WordPress Site (and How to Fix It)
-      + rendered: Why the IoT Threatens Your Tilda Site (and How to Fix It)
-    }
-    type: post
-}"""
+
+    input_data3 = ("test/fixtures/json_yaml/file5.json",
+                   "test/fixtures/json_yaml/file6.json")
+    expected3 = file5_file6_json
+
     assert generate_diff(*input_data3) == expected3
 
 
 def test_gendiff_yaml():
-    input_data1 = "test/fixtures/file1.yaml", "test/fixtures/file2.yaml"
-    expected1 = """{
-    Bakery: [Sourdough loaf, Bagels]
-  - Cheesemonger: [Blue cheese, Feta]
-  + Cheesemonger: [Red cheese, Feta]
-}"""
+    input_data1 = ("test/fixtures/json_yaml/file1.yaml",
+                   "test/fixtures/json_yaml/file2.yaml")
+    expected1 = file1_file2_yaml
+
     assert generate_diff(*input_data1) == expected1
-    input_data2 = "test/fixtures/file3.yaml", "test/fixtures/file4.yaml"
-    expected2 = """{
-    defaults: {
-        adapter: postgres
-        host: localhost
-    }
-    development: {
-        adapter: postgres
-      - database: notmyapp_development
-      + database: myapp_development
-        host: localhost
-    }
-    test: {
-        adapter: postgres
-        database: myapp_test
-        host: localhost
-    }
-}"""
+
+    input_data2 = ("test/fixtures/json_yaml/file3.yaml",
+                   "test/fixtures/json_yaml/file4.yaml")
+    expected2 = file3_file4_yaml
+
     assert generate_diff(*input_data2) == expected2
 
 
 def test_gendiff_wrong_file_name():
-    input_data1 = "some_file.json", "test/fixtures/file2.json"
-    input_data2 = "test/fixtures/file2.json", "some_file.json"
+    input_data1 = "some_file.json", "test/fixtures/json_yaml/file2.json"
+    input_data2 = "test/fixtures/json_yaml/file2.json", "some_file.json"
     expected = "Can't find some_file.json"
     assert generate_diff(*input_data1) == expected
     assert generate_diff(*input_data2) == expected
 
 
 def test_gendiff_json_empty():
-    input_data1 = "test/fixtures/file3.json", "test/fixtures/file3_1.json"
-    expected1 = """{
-  - category: hue
-  - color: black
-  - hex: #000
-  - rgba: [255, 255, 255, 1]
-  - type: primary
-}"""
+    input_data1 = ("test/fixtures/json_yaml/file3.json",
+                   "test/fixtures/json_yaml/file3_1.json")
+    expected1 = file3_file3_1_json
+
     assert generate_diff(*input_data1) == expected1
 
-    input_data2 = "test/fixtures/file3_1.json", "test/fixtures/file3.json"
-    expected2 = """{
-  + category: hue
-  + color: black
-  + hex: #000
-  + rgba: [255, 255, 255, 1]
-  + type: primary
-}"""
+    input_data2 = ("test/fixtures/json_yaml/file3_1.json",
+                   "test/fixtures/json_yaml/file3.json")
+    expected2 = file3_1_file3_json
 
     assert generate_diff(*input_data2) == expected2
 
 
 def test_gendiff_path():
-    input_data1 = ("test/fixtures/filepath1.json",
-                   "test/fixtures/filepath2.json")
-    expected1 = """{
-    common: {
-      + follow: false
-        setting1: Value 1
-      - setting2: 200
-      - setting3: true
-      + setting3: null
-      + setting4: blah blah
-      + setting5: {
-            key5: value5
-        }
-        setting6: {
-            doge: {
-              - wow: \n              + wow: so much
-            }
-            key: value
-          + ops: vops
-        }
-    }
-    group1: {
-      - baz: bas
-      + baz: bars
-        foo: bar
-      - nest: {
-            key: value
-        }
-      + nest: str
-    }
-  - group2: {
-        abc: 12345
-        deep: {
-            id: 45
-        }
-    }
-  + group3: {
-        deep: {
-            id: {
-                number: 45
-            }
-        }
-        fee: 100500
-    }
-}"""
+    input_data1 = ("test/fixtures/json_yaml/filepath1.json",
+                   "test/fixtures/json_yaml/filepath2.json")
+    expected1 = filepath1_filepath2_json
+
     assert generate_diff(*input_data1) == expected1
-    input_data2 = ("test/fixtures/filepath1.yaml",
-                   "test/fixtures/filepath2.yaml")
-    expected2 = """{
-    employees: {
-        martin: {
-          - job: Developer
-          + job: Data scientist
-            name: Martin D'vloper
-          - skills: [python, perl, pascal]
-          + skills: [python, go, pascal]
-        }
-        tabitha: {
-            job: Developer
-            name: Tabitha Bitumen
-          - skills: [lisp, fortran, erlang]
-          + skills: [lisp, cobol, erlang]
-        }
-    }
-}"""
+
+    input_data2 = ("test/fixtures/json_yaml/filepath1.yaml",
+                   "test/fixtures/json_yaml/filepath2.yaml")
+    expected2 = filepath1_filepath2_yaml
+
     assert generate_diff(*input_data2) == expected2

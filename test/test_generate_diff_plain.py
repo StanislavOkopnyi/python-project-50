@@ -19,7 +19,8 @@ def test_gendiff_yaml():
 
     assert generate_diff(*input_data1, make_plain) == expected1
 
-    input_data2 = "test/fixtures/json_yaml/file3.yaml", "test/fixtures/json_yaml/file4.yaml"
+    input_data2 = ("test/fixtures/json_yaml/file3.yaml",
+                   "test/fixtures/json_yaml/file4.yaml")
     expected2 = file3_file4_yaml
 
     assert generate_diff(*input_data2, make_plain) == expected2

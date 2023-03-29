@@ -1,5 +1,7 @@
-from gendiff.compare_dicts import compare_dicts, get_dict_value, get_item_versions, get_name, get_type, make_common_dict, make_item
-from test.fixtures.compare_results.compare_dicts_results import *
+from gendiff.compare_dicts import compare_dicts, get_dict_value, \
+    get_item_versions, get_name, get_type, make_common_dict, make_item
+from test.fixtures.compare_results.compare_dicts_results import \
+    test_compare_dicts1, test_make_common_dict1
 
 
 def test_compare_dicts():

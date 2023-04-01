@@ -45,7 +45,7 @@ def generate_diff(first_file: str, second_file: str,
     return compared_files
 
 
-# If file doesn't exist reutns - Can't find "file"
+# If file doesn't exist returns - Can't find "file"
 # Else returns parsed file
 def check_file(file_path: str) -> dict | str:
     try:

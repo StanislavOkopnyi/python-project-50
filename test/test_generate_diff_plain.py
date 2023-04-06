@@ -1,5 +1,4 @@
 from gendiff import generate_diff
-from gendiff.formatters.plain import make_plain
 from test.fixtures.compare_results.plain_results import file1_file2_json, \
     file3_file4_json, file1_file2_yaml, file3_file4_yaml, \
     filepath1_filepath2_json, file3_1_file3_json, file3_file3_1_json, \

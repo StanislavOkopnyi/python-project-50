@@ -1,5 +1,4 @@
 from gendiff import generate_diff
-from gendiff.formatters.json import make_json
 
 
 def test_generate_dif():

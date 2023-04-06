@@ -2,10 +2,7 @@ from yaml import load
 from gendiff.formatters.json import make_json
 from gendiff.formatters.plain import make_plain
 from gendiff.formatters.stylish import make_stylish
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
+from yaml import CLoader as Loader
 from gendiff.compare_dicts import compare_dicts
 
 
@@ -24,32 +21,36 @@ def generate_diff(first_file: str, second_file: str,
             compared_files (str): String with differences between files
     '''
 
-    if formatter == "stylish":
-        formatter = make_stylish
-    elif formatter == "plain":
-        formatter = make_plain
-    elif formatter == "json":
-        formatter = make_json
+    formatters = {
+        "stylish": make_stylish,
+        "plain": make_plain,
+        "json": make_json
+    }
 
-    loaded_first_file = check_file(first_file)
-    loaded_second_file = check_file(second_file)
+    formatter_function = formatters[formatter]
 
-    if isinstance(loaded_first_file, str):
-        return loaded_first_file
-    if isinstance(loaded_second_file, str):
-        return loaded_second_file
+    opened_first_file = _open_file(first_file)
+    opened_second_file = _open_file(second_file)
 
-    compared_files = compare_dicts(loaded_first_file, loaded_second_file)
-    compared_files = formatter(compared_files)
+    parsed_first_file = _parse_json_yaml(opened_first_file)
+    parsed_second_file = _parse_json_yaml(opened_second_file)
+
+    compared_files = compare_dicts(parsed_first_file, parsed_second_file)
+    compared_files = formatter_function(compared_files)
 
     return compared_files
 
 
 # If file doesn't exist returns - Can't find "file"
 # Else returns parsed file
-def check_file(file_path: str) -> dict | str:
+def _open_file(file_path: str) -> str | None:
     try:
         with open(file_path) as file:
-            return load(file, Loader=Loader)
+            return file.read()
     except FileNotFoundError:
-        return (f"Can't find {file_path}")
+        raise SystemExit(f"Can't find \"{file_path}\"")
+
+
+# Parse readed json/yaml file
+def _parse_json_yaml(file: str) -> dict:
+    return load(file, Loader=Loader)

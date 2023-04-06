@@ -42,9 +42,18 @@ def test_gendiff_yaml():
 def test_gendiff_wrong_file_name():
     input_data1 = "some_file.json", "test/fixtures/json_yaml/file2.json"
     input_data2 = "test/fixtures/json_yaml/file2.json", "some_file.json"
-    expected = "Can't find some_file.json"
-    assert generate_diff(*input_data1) == expected
-    assert generate_diff(*input_data2) == expected
+
+    try:
+        generate_diff(*input_data1)
+        assert False
+    except SystemExit:
+        assert True
+
+    try:
+        generate_diff(*input_data2)
+        assert False
+    except SystemExit:
+        assert True
 
 
 def test_gendiff_json_empty():

@@ -1,9 +1,8 @@
-from yaml import load
 from gendiff.formatters.json import make_json
 from gendiff.formatters.plain import make_plain
 from gendiff.formatters.stylish import make_stylish
-from yaml import CLoader as Loader
 from gendiff.compare_dicts import compare_dicts
+from gendiff.file_parser import parse_json_yaml, open_file
 
 
 def generate_diff(first_file: str, second_file: str,
@@ -29,28 +28,13 @@ def generate_diff(first_file: str, second_file: str,
 
     formatter_function = formatters[formatter]
 
-    opened_first_file = _open_file(first_file)
-    opened_second_file = _open_file(second_file)
+    opened_first_file = open_file(first_file)
+    opened_second_file = open_file(second_file)
 
-    parsed_first_file = _parse_json_yaml(opened_first_file)
-    parsed_second_file = _parse_json_yaml(opened_second_file)
+    parsed_first_file = parse_json_yaml(opened_first_file)
+    parsed_second_file = parse_json_yaml(opened_second_file)
 
     compared_files = compare_dicts(parsed_first_file, parsed_second_file)
     compared_files = formatter_function(compared_files)
 
     return compared_files
-
-
-# If file doesn't exist returns - Can't find "file"
-# Else returns parsed file
-def _open_file(file_path: str) -> str | None:
-    try:
-        with open(file_path) as file:
-            return file.read()
-    except FileNotFoundError:
-        raise SystemExit(f"Can't find \"{file_path}\"")
-
-
-# Parse readed json/yaml file
-def _parse_json_yaml(file: str) -> dict:
-    return load(file, Loader=Loader)

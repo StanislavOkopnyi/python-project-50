@@ -46,13 +46,13 @@ def test_gendiff_wrong_file_name():
     try:
         generate_diff(*input_data1)
         assert False
-    except SystemExit:
+    except FileNotFoundError:
         assert True
 
     try:
         generate_diff(*input_data2)
         assert False
-    except SystemExit:
+    except FileNotFoundError:
         assert True
 
 

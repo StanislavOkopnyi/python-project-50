@@ -4,6 +4,12 @@ from gendiff.formatters.stylish import make_stylish
 from gendiff.compare_dicts import compare_dicts
 from gendiff.file_parser import parse_json_yaml, open_file
 
+FORMATTERS = {
+    "stylish": make_stylish,
+    "plain": make_plain,
+    "json": make_json
+}
+
 
 def generate_diff(first_file: str, second_file: str,
                   formatter="stylish") -> str:
@@ -20,13 +26,7 @@ def generate_diff(first_file: str, second_file: str,
             compared_files (str): String with differences between files
     '''
 
-    formatters = {
-        "stylish": make_stylish,
-        "plain": make_plain,
-        "json": make_json
-    }
-
-    formatter_function = formatters[formatter]
+    formatter_function = FORMATTERS[formatter]
 
     opened_first_file = open_file(first_file)
     opened_second_file = open_file(second_file)
